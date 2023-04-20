@@ -46,4 +46,3 @@ jobs:
       - name: Get result
         run: |
           echo "RAW: ${{ needs.envinput.envars.outputs.result }}"
-          echo "fromJSON: ${{ fromJson(needs.envinput.envars.outputs.result) }}"
