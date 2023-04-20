@@ -51,6 +51,7 @@ jobs:
           echo "fromJSON: ${{ fromJson(needs.envars.outputs.vars) }}"
           touch .env.json
           echo "${{ needs.envars.outputs.vars }}" >> .env.json
+          cat .env.json
 
       - name: convert JSON to .env
         uses: ricosandyca/convert-env-json@main
