@@ -18,19 +18,25 @@ permissions:
   pull-requests: write
 
 jobs:
-  test-env-input:
+  envinput:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/github-script@v6
+        id: envars
         env:
           FIRST_NAME: Ion
           LAST_NAME: Top
         with:
-          script: |
-            const { FIRST_NAME, LAST_NAME } = process.env
-            console.log(`Hello ${FIRST_NAME} ${LAST_NAME}`)
-            const envars = process.env
-            const envars_json = JSON.stringify(envars)
-            console.log(`Hello ${envars.FIRST_NAME} ${envars.LAST_NAME}`)
-            console.log(envars)
-            console.log(envars_json)
+          result-encoding: string
+          script: return JSON.stringify(const { FIRST_NAME, LAST_NAME } = process.env)
+
+      - name: Get result
+        run: echo "${{steps.envars.outputs.result}}"
+
+  envoutput:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get result
+        run: |
+          echo "RAW: ${{ needs.envinput.envars.outputs.result }}"
+          echo "fromJSON: ${{ fromJson(needs.envinput.envars.outputs.result) }}"
