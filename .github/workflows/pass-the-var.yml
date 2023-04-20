@@ -33,8 +33,7 @@ jobs:
               Object.entries(process.env)
               .filter(([key]) => ['FIRST_NAME', 'LAST_NAME'].includes(key))
             )
-            const picked = ({ FIRST_NAME, LAST_NAME } => { FIRST_NAME, LAST_NAME })(process.env)
-            console.log({obj, picked})
+            console.log({obj})
             return JSON.stringify(obj)
 
       - name: Get result
