@@ -41,6 +41,7 @@ jobs:
 
   envoutput:
     runs-on: ubuntu-latest
+    needs: envinput
     steps:
       - name: Get result
         run: |
