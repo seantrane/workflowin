@@ -45,7 +45,22 @@ jobs:
     runs-on: ubuntu-latest
     needs: envars
     steps:
-      - name: Get result
+      - name: Get env vars and save .env.json
         run: |
           echo "RAW: ${{ needs.envars.outputs.vars }}"
           echo "fromJSON: ${{ fromJson(needs.envars.outputs.vars) }}"
+          touch .env.json
+          echo "${{ needs.envars.outputs.vars }}" >> .env.json
+
+      - name: convert JSON to .env
+        uses: ricosandyca/convert-env-json@main
+        with:
+          type: json-to-env
+          input_path: .env.json
+          output_path: .env
+
+      - name: Set env vars from .env
+        run: test -f .env && cat .env >> "$GITHUB_ENV"
+
+      - name: Test env vars
+        run: echo "Hello, $FIRST_NAME $LAST_NAME"
