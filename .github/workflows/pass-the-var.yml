@@ -22,6 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       vars: ${{ steps.envars.outputs.result }}
+      obj: ${{ steps.simple.outputs.json }}
     steps:
       - uses: actions/github-script@v6
         id: envars
@@ -39,11 +40,20 @@ jobs:
               Object.entries(process.env)
               .filter(([key]) => ['FIRST_NAME', 'LAST_NAME', 'MY_KEY', 'MY_ID', 'MY_PASSWORD', 'MY_TOKEN'].includes(key))
             )
-            console.log({obj})
             return JSON.stringify(obj)
 
-      - name: Get result
-        run: echo "${{steps.envars.outputs.result}}"
+      - name: Simple
+        id: simple
+        uses: nickofthyme/object-remap@v1
+        with:
+          __depth: 1
+          __case: upper
+          FIRST_NAME: Ion
+          LAST_NAME: Top
+          MY_KEY: sensitive
+          MY_ID: sensitive
+          MY_PASSWORD: sensitive
+          MY_TOKEN: sensitive
 
   output:
     runs-on: ubuntu-latest
@@ -52,11 +62,25 @@ jobs:
       - name: Test env vars json output
         run: |
           echo "JSON: ${{ needs.envars.outputs.vars }}"
+          echo "OBJECT: ${{ needs.envars.outputs.vars }}"
 
       - name: Set env vars from json
         uses: RaphaelNeumann/json-to-env-action@v1
         with:
           json_envs: ${{ needs.envars.outputs.vars }}
+
+      - name: Test env vars
+        run: |
+          echo "Hello, $FIRST_NAME $LAST_NAME"
+          echo "MY_KEY: $MY_KEY"
+          echo "MY_ID: $MY_ID"
+          echo "MY_PASSWORD: $MY_PASSWORD"
+          echo "MY_TOKEN: $MY_TOKEN"
+
+      - name: Set env vars from obj
+        uses: RaphaelNeumann/json-to-env-action@v1
+        with:
+          json_envs: ${{ needs.envars.outputs.obj }}
 
       - name: Test env vars
         run: |
