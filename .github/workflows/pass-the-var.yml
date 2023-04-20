@@ -28,7 +28,7 @@ jobs:
           LAST_NAME: Top
         with:
           result-encoding: string
-          script: return JSON.stringify(const { FIRST_NAME, LAST_NAME } = process.env)
+          script: return JSON.stringify({ FIRST_NAME, LAST_NAME } = process.env)
 
       - name: Get result
         run: echo "${{steps.envars.outputs.result}}"
