@@ -48,3 +48,4 @@ jobs:
       - name: Get result
         run: |
           echo "RAW: ${{ needs.envars.outputs.vars }}"
+          echo "fromJSON: ${{ fromJson(needs.envars.outputs.vars) }}"
