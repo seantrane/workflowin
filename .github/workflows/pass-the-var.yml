@@ -1,0 +1,36 @@
+---
+name: Pass the VAR
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/pass-the-var.yml
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.ref }}-${{ github.workflow }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  statuses: write
+  pull-requests: write
+
+jobs:
+  test-env-input:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v6
+        env:
+          FIRST_NAME: Ion
+          LAST_NAME: Top
+        with:
+          script: |
+            const { FIRST_NAME, LAST_NAME } = process.env
+            console.log(`Hello ${FIRST_NAME} ${LAST_NAME}`)
+            const envars = process.env
+            const envars-json = JSON.stringify(envars)
+            console.log(`Hello ${envars.FIRST_NAME} ${envars.LAST_NAME}`)
+            console.log(envars)
+            console.log(envars-json)
