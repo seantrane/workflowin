@@ -30,7 +30,7 @@ jobs:
             const { FIRST_NAME, LAST_NAME } = process.env
             console.log(`Hello ${FIRST_NAME} ${LAST_NAME}`)
             const envars = process.env
-            const envars-json = JSON.stringify(envars)
+            const envars_json = JSON.stringify(envars)
             console.log(`Hello ${envars.FIRST_NAME} ${envars.LAST_NAME}`)
             console.log(envars)
-            console.log(envars-json)
+            console.log(envars_json)
